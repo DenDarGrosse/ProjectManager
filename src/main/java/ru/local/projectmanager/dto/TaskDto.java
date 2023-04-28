@@ -1,24 +1,18 @@
 package ru.local.projectmanager.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ru.local.projectmanager.entity.enums.TaskStatus;
 import ru.local.projectmanager.entity.enums.TaskType;
-
-import java.util.Date;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
-@EqualsAndHashCode
-public class TaskDto {
+@EqualsAndHashCode(callSuper = true)
+public class TaskDto extends AbstractObjectDto{
 
-    private UUID id;
-    private UUID parent;
     private TaskType taskType;
     private TaskStatus taskStatus;
-    private String name;
-    private Date createdDate;
-    private Date lastModifiedDate;
 }

@@ -1,10 +1,10 @@
 package ru.local.projectmanager.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.local.projectmanager.dto.TaskDto;
+import ru.local.projectmanager.entity.AbstractObject;
 import ru.local.projectmanager.entity.Task;
+import ru.local.projectmanager.repository.AbstractObjectRepository;
 import ru.local.projectmanager.repository.TaskRepository;
 
 import java.util.NoSuchElementException;
@@ -12,39 +12,42 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class TaskService {
-
+public class TaskService extends AbstractObjectService {
     private final TaskRepository taskRepository;
-    private final ProjectService projectService;
 
-    public TaskDto toDto(final Task task) {
-        var parent = task.getParent();
-        var parentId = Objects.isNull(parent) ? null : parent.getId();
+    public TaskService(final AbstractObjectRepository abstractObjectRepository,
+                       final TaskRepository taskRepository) {
+        super(abstractObjectRepository);
+        this.taskRepository = taskRepository;
+    }
 
-        return TaskDto.builder()
-                .id(task.getId())
-                .parent(parentId)
-                .taskType(task.getTaskType())
-                .taskStatus(task.getTaskStatus())
-                .name(task.getTaskName())
-                .createdDate(task.getCreatedDate())
-                .lastModifiedDate(task.getLastModifiedDate())
-                .build();
+    @Override
+    public Class<? extends AbstractObject> getObjectType() {
+        return Task.class;
+    }
+
+    @Override
+    public TaskDto toDto(final AbstractObject abstractObject) {
+        var task = (Task) abstractObject;
+        var taskDto = new TaskDto();
+
+        toDto(task, taskDto);
+
+        taskDto.setTaskType(task.getTaskType());
+        taskDto.setTaskStatus(task.getTaskStatus());
+
+        return taskDto;
     }
 
     public Task fromDto(final TaskDto taskDto) {
-        var parent = projectService.find(taskDto.getParent());
+        var task = new Task();
 
-        return Task.builder()
-                .id(taskDto.getId())
-                .parent(parent)
-                .taskType(taskDto.getTaskType())
-                .taskStatus(taskDto.getTaskStatus())
-                .taskName(taskDto.getName())
-                .createdDate(taskDto.getCreatedDate())
-                .lastModifiedDate(taskDto.getLastModifiedDate())
-                .build();
+        fromDto(taskDto, task);
+
+        task.setTaskType(taskDto.getTaskType());
+        task.setTaskStatus(taskDto.getTaskStatus());
+
+        return task;
     }
 
     public TaskDto get(final UUID id) {
@@ -62,8 +65,7 @@ public class TaskService {
         var task = fromDto(taskDto);
         var oldTask = find(task.getId());
 
-        oldTask.setObjectName(task.getObjectName());
-        oldTask.setParent(task.getParent());
+        update(oldTask, task);
 
         var resultTask = taskRepository.save(oldTask);
         return toDto(resultTask);

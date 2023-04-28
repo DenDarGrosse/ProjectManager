@@ -1,20 +1,12 @@
 package ru.local.projectmanager.dto;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.UUID;
-
-@AllArgsConstructor
+//@AllArgsConstructor //fixme uncomment when where will be fields
 @NoArgsConstructor
 @Data
-@Builder
-@EqualsAndHashCode
-public class ProjectDto {
-
-    private UUID id;
-    private UUID parent;
-    private String name;
-    private Date createdDate;
-    private Date lastModifiedDate;
+@EqualsAndHashCode(callSuper = true)
+public class ProjectDto extends AbstractObjectDto {
 }

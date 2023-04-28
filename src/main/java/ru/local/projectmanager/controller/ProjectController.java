@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import ru.local.projectmanager.dto.AbstractObjectDto;
 import ru.local.projectmanager.dto.ProjectDto;
+import ru.local.projectmanager.service.HierarchyService;
 import ru.local.projectmanager.service.ProjectService;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final HierarchyService hierarchyService;
 
     @GetMapping("/{id}")
     public ResponseEntity<ProjectDto> getProject(@PathVariable UUID id) {
@@ -25,14 +28,14 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}/child")
-    public ResponseEntity<List<ProjectDto>> getChildProjects(@PathVariable UUID id) {
-        var child = projectService.getChild(id);
+    public ResponseEntity<List<AbstractObjectDto>> getChildProjects(@PathVariable UUID id) {
+        var child = hierarchyService.getChild(id);
         return ResponseEntity.ok().body(child);
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProjectDto>> getRootProjects() {
-        var rootProjects = projectService.getRoots();
+    public ResponseEntity<List<AbstractObjectDto>> getRootProjects() {
+        var rootProjects = hierarchyService.getRoots();
         return ResponseEntity.ok().body(rootProjects);
     }
 

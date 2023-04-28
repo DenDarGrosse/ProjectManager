@@ -1,46 +1,16 @@
 package ru.local.projectmanager.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
-@AllArgsConstructor
+//@AllArgsConstructor //fixme: uncomment, when where will be fields
 @NoArgsConstructor
 @Data
-@Builder
-@EqualsAndHashCode
-@EntityListeners(AuditingEntityListener.class)
-public class Project implements Serializable {
-
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Project parent;
-
-    @OneToMany(mappedBy = "parent",
-            fetch = FetchType.LAZY)
-    private List<Project> children;
-
-    @Column(nullable = false)
-    private String projectName;
-
-    @CreatedDate
-    @Column(nullable = false)
-    private Date createdDate;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private Date lastModifiedDate;
+@EqualsAndHashCode(callSuper = true)
+@DiscriminatorValue("project")
+public class Project extends AbstractObject {
 }

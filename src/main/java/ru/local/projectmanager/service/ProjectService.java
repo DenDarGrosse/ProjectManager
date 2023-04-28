@@ -1,62 +1,52 @@
 package ru.local.projectmanager.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.local.projectmanager.dto.ProjectDto;
+import ru.local.projectmanager.entity.AbstractObject;
 import ru.local.projectmanager.entity.Project;
+import ru.local.projectmanager.repository.AbstractObjectRepository;
 import ru.local.projectmanager.repository.ProjectRepository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ProjectService {
-
+public class ProjectService extends AbstractObjectService {
     private final ProjectRepository projectRepository;
 
-    public ProjectDto toDto(final Project project) {
-        var parent = project.getParent();
-        var parentId = Objects.isNull(parent) ? null : parent.getId();
+    public ProjectService(final AbstractObjectRepository abstractObjectRepository,
+                          final ProjectRepository projectRepository) {
+        super(abstractObjectRepository);
+        this.projectRepository = projectRepository;
+    }
 
-        return ProjectDto.builder()
-                .id(project.getId())
-                .parent(parentId)
-                .name(project.getProjectName())
-                .createdDate(project.getCreatedDate())
-                .lastModifiedDate(project.getLastModifiedDate())
-                .build();
+    @Override
+    public Class<? extends AbstractObject> getObjectType() {
+        return Project.class;
+    }
+
+    @Override
+    public ProjectDto toDto(final AbstractObject abstractObject) {
+        var project = (Project) abstractObject;
+        var projectDto = new ProjectDto();
+
+        toDto(project, projectDto);
+
+        return projectDto;
     }
 
     public Project fromDto(final ProjectDto projectDto) {
-        var parent = find(projectDto.getParent());
+        var project = new Project();
 
-        return Project.builder()
-                .id(projectDto.getId())
-                .parent(parent)
-                .projectName(projectDto.getName())
-                .createdDate(projectDto.getCreatedDate())
-                .lastModifiedDate(projectDto.getLastModifiedDate())
-                .build();
+        fromDto(projectDto, project);
+
+        return project;
     }
 
     public ProjectDto get(final UUID id) {
         var project = find(id);
         return toDto(project);
-    }
-
-    public List<ProjectDto> getChild(final UUID id) {
-        var project = find(id);
-        var child = project.getChildren();
-        return child.stream().map(this::toDto).toList();
-    }
-
-    public List<ProjectDto> getRoots() {
-        var projects = projectRepository.findAllByParentIsNull();
-        return projects.stream().map(this::toDto).toList();
     }
 
     public ProjectDto create(final ProjectDto projectDto) {
@@ -71,8 +61,7 @@ public class ProjectService {
         var project = fromDto(projectDto);
         var oldProject = find(project.getId());
 
-        oldProject.setProjectName(project.getProjectName());
-        oldProject.setParent(project.getParent());
+        update(oldProject, project);
 
         var resultProject = projectRepository.save(oldProject);
         return toDto(resultProject);
