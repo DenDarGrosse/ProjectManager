@@ -29,6 +29,12 @@ public class TaskController {
         return ResponseEntity.ok().body(resultTaskDto);
     }
 
+    @PatchMapping
+    public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto taskDto) {
+        var resultTaskDto = taskService.update(taskDto);
+        return ResponseEntity.ok().body(resultTaskDto);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<TaskDto> deleteProject(@PathVariable UUID id) {
         var taskDto = taskService.delete(id);

@@ -58,6 +58,17 @@ public class TaskService {
         return toDto(resultTask);
     }
 
+    public TaskDto update(final TaskDto taskDto) {
+        var task = fromDto(taskDto);
+        var oldTask = find(task.getId());
+
+        oldTask.setObjectName(task.getObjectName());
+        oldTask.setParent(task.getParent());
+
+        var resultTask = taskRepository.save(oldTask);
+        return toDto(resultTask);
+    }
+
     public TaskDto delete(final UUID id) {
         var task = find(id);
         taskRepository.delete(task);
