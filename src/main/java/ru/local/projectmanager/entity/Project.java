@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,8 +29,9 @@ public class Project implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Project parent;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-    private Set<Project> children;
+    @OneToMany(mappedBy = "parent",
+            fetch = FetchType.LAZY)
+    private List<Project> children;
 
     @Column(nullable = false)
     private String projectName;

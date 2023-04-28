@@ -7,6 +7,7 @@ import ru.local.projectmanager.dto.ProjectDto;
 import ru.local.projectmanager.entity.Project;
 import ru.local.projectmanager.repository.ProjectRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
@@ -47,9 +48,33 @@ public class ProjectService {
         return toDto(project);
     }
 
-    public ProjectDto save(final ProjectDto projectDto) {
+    public List<ProjectDto> getChild(final UUID id) {
+        var project = find(id);
+        var child = project.getChildren();
+        return child.stream().map(this::toDto).toList();
+    }
+
+    public List<ProjectDto> getRoots() {
+        var projects = projectRepository.findAllByParentIsNull();
+        return projects.stream().map(this::toDto).toList();
+    }
+
+    public ProjectDto create(final ProjectDto projectDto) {
+        projectDto.setId(null);
+
         var project = fromDto(projectDto);
         var resultProject = projectRepository.save(project);
+        return toDto(resultProject);
+    }
+
+    public ProjectDto update(final ProjectDto projectDto) {
+        var project = fromDto(projectDto);
+        var oldProject = find(project.getId());
+
+        oldProject.setProjectName(project.getProjectName());
+        oldProject.setParent(project.getParent());
+
+        var resultProject = projectRepository.save(oldProject);
         return toDto(resultProject);
     }
 
