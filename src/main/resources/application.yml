@@ -10,4 +10,18 @@ spring:
       ddl-auto: none
   h2:
     console:
-      enabled: true
+      enabled: false
+
+jwt:
+  token:
+    secret: externalintegrationmoduleprojectastratime032023
+    expired: 1800000
+
+server:
+  error:
+    include-message: always
+  port: 9090
+
+frontend:
+  serverHost: http://localhost
+  serverPort: 3000

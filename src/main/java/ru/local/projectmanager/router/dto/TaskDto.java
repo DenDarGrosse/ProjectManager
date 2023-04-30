@@ -1,4 +1,4 @@
-package ru.local.projectmanager.dto;
+package ru.local.projectmanager.router.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -5,13 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.local.projectmanager.dto.TaskDto;
+import ru.local.projectmanager.router.dto.TaskDto;
 import ru.local.projectmanager.service.TaskService;
 
 import java.util.UUID;
 
+import static ru.local.projectmanager.router.Router.TASK_ENDPOINT;
+
 @Controller
-@RequestMapping(value = "/api/task")
+@RequestMapping(value = TASK_ENDPOINT)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskController {
 

@@ -5,16 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.local.projectmanager.dto.AbstractObjectDto;
-import ru.local.projectmanager.dto.ProjectDto;
+import ru.local.projectmanager.router.dto.AbstractObjectDto;
+import ru.local.projectmanager.router.dto.ProjectDto;
 import ru.local.projectmanager.service.HierarchyService;
 import ru.local.projectmanager.service.ProjectService;
 
 import java.util.List;
 import java.util.UUID;
 
+import static ru.local.projectmanager.router.Router.PROJECT_ENDPOINT;
+
 @Controller
-@RequestMapping(value = "/api/project")
+@RequestMapping(value = PROJECT_ENDPOINT)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProjectController {
 

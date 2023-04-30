@@ -1,7 +1,7 @@
 package ru.local.projectmanager.service;
 
 import org.springframework.stereotype.Service;
-import ru.local.projectmanager.dto.TaskDto;
+import ru.local.projectmanager.router.dto.TaskDto;
 import ru.local.projectmanager.entity.AbstractObject;
 import ru.local.projectmanager.entity.Task;
 import ru.local.projectmanager.repository.AbstractObjectRepository;

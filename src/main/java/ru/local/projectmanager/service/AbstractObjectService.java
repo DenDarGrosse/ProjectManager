@@ -3,7 +3,7 @@ package ru.local.projectmanager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.local.projectmanager.dto.AbstractObjectDto;
+import ru.local.projectmanager.router.dto.AbstractObjectDto;
 import ru.local.projectmanager.entity.AbstractObject;
 import ru.local.projectmanager.repository.AbstractObjectRepository;
 
@@ -52,7 +52,6 @@ public abstract class AbstractObjectService {
     }
 
     public void update(final AbstractObject oldAbstractObject, final AbstractObject newAbstractObject) {
-
         oldAbstractObject.setObjectName(newAbstractObject.getObjectName());
         oldAbstractObject.setParent(newAbstractObject.getParent());
     }
