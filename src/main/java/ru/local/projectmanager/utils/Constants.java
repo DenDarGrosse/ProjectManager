@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Constants {
-    AUTHORIZATION("AUTHORIZATION");
+    AUTHORIZATION("AUTHORIZATION"), BEARER("Bearer ");
 
     private final String constValue;
 }

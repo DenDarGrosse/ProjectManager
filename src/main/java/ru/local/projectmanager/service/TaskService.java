@@ -16,8 +16,9 @@ public class TaskService extends AbstractObjectService {
     private final TaskRepository taskRepository;
 
     public TaskService(final AbstractObjectRepository abstractObjectRepository,
-                       final TaskRepository taskRepository) {
-        super(abstractObjectRepository);
+                       final TaskRepository taskRepository,
+                       final UserService userService) {
+        super(abstractObjectRepository, userService);
         this.taskRepository = taskRepository;
     }
 
@@ -55,8 +56,14 @@ public class TaskService extends AbstractObjectService {
         return toDto(task);
     }
 
-    public TaskDto save(final TaskDto taskDto) {
+    public TaskDto create(final TaskDto taskDto, final String login) {
+        taskDto.setId(null);
+
+        var user = userService.getUserByLogin(login);
         var task = fromDto(taskDto);
+
+        task.setOwner(user);
+
         var resultTask = taskRepository.save(task);
         return toDto(resultTask);
     }

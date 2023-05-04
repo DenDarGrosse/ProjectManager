@@ -15,6 +15,7 @@ import java.util.UUID;
 public class AbstractObjectDto {
     private UUID id;
     private UUID parent;
+    private UUID owner;
     private String name;
     private Date createdDate;
     private Date lastModifiedDate;

@@ -3,9 +3,11 @@ package ru.local.projectmanager.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.local.projectmanager.router.dto.TaskDto;
+import ru.local.projectmanager.security.jwt.JwtUser;
 import ru.local.projectmanager.service.TaskService;
 
 import java.util.UUID;
@@ -26,8 +28,9 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskDto> saveTask(@RequestBody TaskDto taskDto) {
-        var resultTaskDto = taskService.save(taskDto);
+    public ResponseEntity<TaskDto> saveTask(@RequestBody TaskDto taskDto,
+                                            @AuthenticationPrincipal JwtUser jwtUser) {
+        var resultTaskDto = taskService.create(taskDto, jwtUser.getUsername());
         return ResponseEntity.ok().body(resultTaskDto);
     }
 

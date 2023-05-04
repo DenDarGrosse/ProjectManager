@@ -16,6 +16,7 @@ import java.util.UUID;
 public abstract class AbstractObjectService {
 
     private final AbstractObjectRepository abstractObjectRepository;
+    protected final UserService userService;
 
     public abstract Class<? extends AbstractObject> getObjectType();
 
@@ -27,6 +28,7 @@ public abstract class AbstractObjectService {
 
         abstractObjectDto.setId(abstractObject.getId());
         abstractObjectDto.setParent(parentId);
+        abstractObjectDto.setOwner(abstractObject.getOwner().getUserId());
         abstractObjectDto.setName(abstractObject.getObjectName());
         abstractObjectDto.setCreatedDate(abstractObject.getCreatedDate());
         abstractObjectDto.setLastModifiedDate(abstractObject.getLastModifiedDate());
@@ -37,6 +39,7 @@ public abstract class AbstractObjectService {
 
         abstractObject.setId(abstractObjectDto.getId());
         abstractObject.setParent(parent);
+        abstractObject.setOwner(userService.find(abstractObjectDto.getOwner()));
         abstractObject.setObjectName(abstractObjectDto.getName());
         abstractObject.setCreatedDate(abstractObjectDto.getCreatedDate());
         abstractObject.setLastModifiedDate(abstractObjectDto.getLastModifiedDate());

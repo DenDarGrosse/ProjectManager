@@ -3,10 +3,14 @@ package ru.local.projectmanager.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import ru.local.projectmanager.entity.User;
 import ru.local.projectmanager.router.dto.AbstractObjectDto;
 import ru.local.projectmanager.router.dto.ProjectDto;
+import ru.local.projectmanager.security.jwt.JwtUser;
 import ru.local.projectmanager.service.HierarchyService;
 import ru.local.projectmanager.service.ProjectService;
 
@@ -42,8 +46,9 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto projectDto) {
-        var resultProjectDto = projectService.create(projectDto);
+    public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto projectDto,
+                                                    @AuthenticationPrincipal JwtUser jwtUser) {
+        var resultProjectDto = projectService.create(projectDto, jwtUser.getUsername());
         return ResponseEntity.ok().body(resultProjectDto);
     }
 

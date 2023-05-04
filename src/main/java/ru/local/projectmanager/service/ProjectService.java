@@ -6,6 +6,7 @@ import ru.local.projectmanager.entity.AbstractObject;
 import ru.local.projectmanager.entity.Project;
 import ru.local.projectmanager.repository.AbstractObjectRepository;
 import ru.local.projectmanager.repository.ProjectRepository;
+import ru.local.projectmanager.security.jwt.JwtUser;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -16,8 +17,9 @@ public class ProjectService extends AbstractObjectService {
     private final ProjectRepository projectRepository;
 
     public ProjectService(final AbstractObjectRepository abstractObjectRepository,
-                          final ProjectRepository projectRepository) {
-        super(abstractObjectRepository);
+                          final ProjectRepository projectRepository,
+                          final UserService userService) {
+        super(abstractObjectRepository, userService);
         this.projectRepository = projectRepository;
     }
 
@@ -49,10 +51,14 @@ public class ProjectService extends AbstractObjectService {
         return toDto(project);
     }
 
-    public ProjectDto create(final ProjectDto projectDto) {
+    public ProjectDto create(final ProjectDto projectDto, final String login) {
         projectDto.setId(null);
 
+        var user = userService.getUserByLogin(login);
         var project = fromDto(projectDto);
+
+        project.setOwner(user);
+
         var resultProject = projectRepository.save(project);
         return toDto(resultProject);
     }

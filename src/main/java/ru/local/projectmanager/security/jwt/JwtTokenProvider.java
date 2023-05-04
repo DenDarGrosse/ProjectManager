@@ -56,7 +56,11 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest request) {
         secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-        return request.getHeader(Constants.AUTHORIZATION.getConstValue());
+        String bearerToken = request.getHeader(Constants.AUTHORIZATION.getConstValue());
+        if (bearerToken != null && bearerToken.startsWith(Constants.BEARER.getConstValue())) {
+            return bearerToken.substring(Constants.BEARER.getConstValue().length());
+        }
+        return null;
     }
 
     public Authentication getAuthentication(String token) {

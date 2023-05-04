@@ -3,12 +3,15 @@ package ru.local.projectmanager.service;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+import ru.local.projectmanager.entity.Project;
 import ru.local.projectmanager.entity.Role;
 import ru.local.projectmanager.entity.User;
 import ru.local.projectmanager.repository.UserRepository;
 import ru.local.projectmanager.utils.BCryptEncoderUtil;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -31,4 +34,12 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
+    public User find(final UUID id) {
+        if (Objects.isNull(id)) {
+            return null;
+        }
+
+        return userRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
+    }
 }

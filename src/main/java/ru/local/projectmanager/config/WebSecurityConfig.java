@@ -3,6 +3,7 @@ package ru.local.projectmanager.config;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,9 +38,13 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(LOGIN_ENDPOINT, REGISTRATION_ENDPOINT).permitAll()
-                        .requestMatchers(PROJECT_ENDPOINT, TASK_ENDPOINT)
-                        .hasAuthority(String.valueOf(RoleEnum.ADMIN))
+                        .requestMatchers(LOGIN_ENDPOINT).permitAll()
+                        .requestMatchers(HttpMethod.GET, PROJECT_ENDPOINT).hasAnyAuthority(String.valueOf(RoleEnum.USER), String.valueOf(RoleEnum.ADMIN))
+                        .requestMatchers(HttpMethod.POST, PROJECT_ENDPOINT).hasAuthority(String.valueOf(RoleEnum.ADMIN))
+                        .requestMatchers(HttpMethod.PATCH, PROJECT_ENDPOINT).hasAuthority(String.valueOf(RoleEnum.ADMIN))
+                        .requestMatchers(PROJECT_ENDPOINT + "/*").hasAuthority(String.valueOf(RoleEnum.ADMIN))
+                        .requestMatchers(TASK_ENDPOINT).hasAnyAuthority(String.valueOf(RoleEnum.USER), String.valueOf(RoleEnum.ADMIN))
+                        .requestMatchers(REGISTRATION_ENDPOINT).hasAuthority(String.valueOf(RoleEnum.ADMIN))
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

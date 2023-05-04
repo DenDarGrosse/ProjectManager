@@ -35,6 +35,10 @@ public abstract class AbstractObject implements Serializable {
             fetch = FetchType.LAZY)
     private List<AbstractObject> children;
 
+    @JoinColumn(name = "owner_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User owner;
+
     @Column(nullable = false)
     private String objectName;
 
