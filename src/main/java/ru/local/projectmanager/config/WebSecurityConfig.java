@@ -42,7 +42,6 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, PROJECT_ENDPOINT).hasAnyAuthority(String.valueOf(RoleEnum.USER), String.valueOf(RoleEnum.ADMIN))
                         .requestMatchers(HttpMethod.POST, PROJECT_ENDPOINT).hasAuthority(String.valueOf(RoleEnum.ADMIN))
                         .requestMatchers(HttpMethod.PATCH, PROJECT_ENDPOINT).hasAuthority(String.valueOf(RoleEnum.ADMIN))
-                        .requestMatchers(PROJECT_ENDPOINT + "/*").hasAuthority(String.valueOf(RoleEnum.ADMIN))
                         .requestMatchers(TASK_ENDPOINT).hasAnyAuthority(String.valueOf(RoleEnum.USER), String.valueOf(RoleEnum.ADMIN))
                         .requestMatchers(REGISTRATION_ENDPOINT).hasAuthority(String.valueOf(RoleEnum.ADMIN))
                         .anyRequest().authenticated()

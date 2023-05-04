@@ -1,12 +1,11 @@
 package ru.local.projectmanager.service;
 
 import org.springframework.stereotype.Service;
-import ru.local.projectmanager.router.dto.ProjectDto;
 import ru.local.projectmanager.entity.AbstractObject;
 import ru.local.projectmanager.entity.Project;
 import ru.local.projectmanager.repository.AbstractObjectRepository;
 import ru.local.projectmanager.repository.ProjectRepository;
-import ru.local.projectmanager.security.jwt.JwtUser;
+import ru.local.projectmanager.router.dto.ProjectDto;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -85,6 +84,6 @@ public class ProjectService extends AbstractObjectService {
         }
 
         return projectRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new NoSuchElementException("Can not find object with id: " + id));
     }
 }

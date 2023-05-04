@@ -3,7 +3,6 @@ package ru.local.projectmanager.service;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
-import ru.local.projectmanager.entity.Project;
 import ru.local.projectmanager.entity.Role;
 import ru.local.projectmanager.entity.User;
 import ru.local.projectmanager.repository.UserRepository;
@@ -40,6 +39,6 @@ public class UserService {
         }
 
         return userRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new NoSuchElementException("Can not find object with id: " + id));
     }
 }

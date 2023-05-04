@@ -16,6 +16,6 @@ public class RoleService {
 
     public Role getRoleById(UUID roleId) {
         return roleRepository.findById(roleId)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new NoSuchElementException("Can not find object with id: " + roleId));
     }
 }

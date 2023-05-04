@@ -51,7 +51,7 @@ public abstract class AbstractObjectService {
         }
 
         return abstractObjectRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new NoSuchElementException("Can not find object with id: " + id));
     }
 
     public void update(final AbstractObject oldAbstractObject, final AbstractObject newAbstractObject) {

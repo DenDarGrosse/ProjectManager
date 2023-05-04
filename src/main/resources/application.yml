@@ -10,7 +10,7 @@ spring:
       ddl-auto: none
   h2:
     console:
-      enabled: false
+      enabled: true
 
 jwt:
   token:

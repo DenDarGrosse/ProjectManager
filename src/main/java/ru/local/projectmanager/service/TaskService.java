@@ -1,6 +1,8 @@
 package ru.local.projectmanager.service;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+import ru.local.projectmanager.entity.enums.RoleEnum;
 import ru.local.projectmanager.router.dto.TaskDto;
 import ru.local.projectmanager.entity.AbstractObject;
 import ru.local.projectmanager.entity.Task;
@@ -68,18 +70,25 @@ public class TaskService extends AbstractObjectService {
         return toDto(resultTask);
     }
 
-    public TaskDto update(final TaskDto taskDto) {
+    public TaskDto update(final TaskDto taskDto, final String username) {
         var task = fromDto(taskDto);
         var oldTask = find(task.getId());
 
+        checkCanDo(oldTask, username);
+
         update(oldTask, task);
+
+        oldTask.setTaskStatus(task.getTaskStatus());
+        oldTask.setTaskType(task.getTaskType());
 
         var resultTask = taskRepository.save(oldTask);
         return toDto(resultTask);
     }
 
-    public TaskDto delete(final UUID id) {
+    public TaskDto delete(final UUID id, final String username) {
         var task = find(id);
+        checkCanDo(task, username);
+
         taskRepository.delete(task);
         return toDto(task);
     }
@@ -90,6 +99,15 @@ public class TaskService extends AbstractObjectService {
         }
 
         return taskRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new NoSuchElementException("Can not find object with id: " + id));
+    }
+
+    private void checkCanDo(final Task task, final String username){
+        var user = userService.getUserByLogin(username);
+
+        if (!Objects.equals(user.getUserRoles().getRoleName(), String.valueOf(RoleEnum.ADMIN))
+                && !task.getOwner().equals(user)) {
+            throw new BadCredentialsException("You can delete only your task or be admin");
+        }
     }
 }

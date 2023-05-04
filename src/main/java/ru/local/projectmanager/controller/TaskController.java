@@ -35,14 +35,16 @@ public class TaskController {
     }
 
     @PatchMapping
-    public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto taskDto) {
-        var resultTaskDto = taskService.update(taskDto);
+    public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto taskDto,
+                                              @AuthenticationPrincipal JwtUser jwtUser) {
+        var resultTaskDto = taskService.update(taskDto, jwtUser.getUsername());
         return ResponseEntity.ok().body(resultTaskDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<TaskDto> deleteProject(@PathVariable UUID id) {
-        var taskDto = taskService.delete(id);
+    public ResponseEntity<TaskDto> deleteProject(@PathVariable UUID id,
+                                                 @AuthenticationPrincipal JwtUser jwtUser) {
+        var taskDto = taskService.delete(id, jwtUser.getUsername());
         return ResponseEntity.ok().body(taskDto);
     }
 }
