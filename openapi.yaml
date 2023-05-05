@@ -1,0 +1,423 @@
+openapi: 3.0.3
+info:
+  title: Project manager
+  description: |-
+    Тестовое задание. Использует Bearer authorization
+  version: 1.0.11
+tags:
+  - name: Task
+    description: Everything about tasks
+  - name: Project
+    description: Everything about projects
+  - name: Auth
+    description: Everything about authorization
+paths:
+  /api/auth/task/{id}:
+    get:
+      tags:
+        - Task
+      summary: Get task by id
+      description: Get task by id
+      operationId: getTask
+      parameters:
+        - name: id
+          in: path
+          description: ID of task to execute
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'          
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+    delete:
+      tags:
+        - Task
+      summary: Delete task by id
+      description: Delete task by id
+      operationId: deleteTask
+      parameters:
+        - name: id
+          in: path
+          description: ID of task to execute
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'          
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+  /api/auth/task:
+    post:
+      tags:
+        - Task
+      summary: Create task
+      description: Create task
+      operationId: createTask
+      requestBody:
+        description: task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskDto' 
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'          
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+    patch:
+      tags:
+        - Task
+      summary: Update task
+      description: Update task
+      operationId: updateTask
+      requestBody:
+        description: task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskDto' 
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'          
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+  /api/auth/project/{id}:
+    get:
+      tags:
+        - Project
+      summary: Get project by id
+      description: Get project by id
+      operationId: getProject
+      parameters:
+        - name: id
+          in: path
+          description: ID of project to execute
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'          
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+    delete:
+      tags:
+        - Project
+      summary: Delete project by id
+      description: Delete project by id
+      operationId: deleteProject
+      parameters:
+        - name: id
+          in: path
+          description: ID of project to execute
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'          
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+  /api/auth/project:
+    post:
+      tags:
+        - Project
+      summary: Create project
+      description: Create project
+      operationId: createProject
+      requestBody:
+        description: project
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectDto' 
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'          
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+    patch:
+      tags:
+        - Project
+      summary: Update project
+      description: Update project
+      operationId: updateProject
+      requestBody:
+        description: project
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectDto' 
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'          
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+    get:
+      tags:
+        - Project
+      summary: Get root projects
+      description: Get root projects
+      operationId: getRootProjects
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDto'        
+  /api/auth/project/{id}/child:
+    get:
+      tags:
+        - Project
+      summary: Get child projects and tasks by id
+      description: Get child projects and tasks by id
+      operationId: getChildProjects
+      parameters:
+        - name: id
+          in: path
+          description: ID of project to execute
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/ProjectDto'   
+                    - $ref: '#/components/schemas/TaskDto' 
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+  /api/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      description: Login user. After logging in uses Bearer authorization
+      operationId: login
+      requestBody:
+        description: login
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto' 
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseDto' 
+        '400':
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+  /api/registration:
+    post:
+      tags:
+        - Auth
+      summary: Registration of user
+      description: Registration of user
+      operationId: reg
+      requestBody:
+        description: registration
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationDto' 
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'   
+components:
+  schemas:
+    TaskDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ac2c37bb-b967-44fb-90ec-025b4afee893
+        parent:
+          type: string
+          format: uuid
+          example: ac2c37bb-b967-44fb-90ec-025b4afee893
+        owner:
+          type: string
+          format: uuid
+          example: ac2c37bb-b967-44fb-90ec-025b4afee893
+        name:
+          type: string
+          example: test task
+        taskType:
+          type: string
+          format: enum
+          example: TYPE_MANAGER
+          enum:
+            - TYPE_MANAGER
+            - TYPE_SPECIALIST
+        taskStatus:
+          type: string
+          format: enum
+          example: STATUS_NEW
+          enum:
+            - STATUS_NEW
+            - STATUS_PROGRESS
+            - STATUS_DONE
+        createdDate:
+          type: string
+          format: date
+        lastModifiedDate:
+          type: string
+          format: date
+    ProjectDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ac2c37bb-b967-44fb-90ec-025b4afee893
+        parent:
+          type: string
+          format: uuid
+          example: ad9d351f-c11f-4f2f-90b8-2430ff9407cd
+        owner:
+          type: string
+          format: uuid
+          example: d9fa434a-9b34-496f-b88b-f72324c62c15
+        name:
+          type: string
+          example: test project
+        createdDate:
+          type: string
+          format: date
+        lastModifiedDate:
+          type: string
+          format: date
+    LoginDto:
+      type: object
+      properties:
+        login:
+          type: string
+          example: username
+        password:
+          type: string
+          example: password
+    LoginResponseDto:
+      type: object
+      properties:
+        login:
+          type: string
+          example: username
+        token:
+          type: string
+          example: token
+    RegistrationDto:
+      type: object
+      properties:
+        login:
+          type: string
+          example: username
+        password:
+          type: string
+          example: password
+        userRoles:
+          type: string
+          format: uuid
+          example: d9fa434a-9b34-496f-b88b-f72324c62c15
+    ErrorDto:
+      type: object
+      properties:
+        login:
+          type: string
+          example: RANDOM TEXT you have done something wrong RANDOM TEXT
