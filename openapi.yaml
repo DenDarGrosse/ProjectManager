@@ -323,6 +323,7 @@ components:
   schemas:
     TaskDto:
       type: object
+      required: [name, taskType, taskStatus]
       properties:
         id:
           type: string
@@ -362,6 +363,7 @@ components:
           format: date
     ProjectDto:
       type: object
+      required: [name]
       properties:
         id:
           type: string
@@ -386,6 +388,7 @@ components:
           format: date
     LoginDto:
       type: object
+      required: [login, password]
       properties:
         login:
           type: string
@@ -404,6 +407,7 @@ components:
           example: token
     RegistrationDto:
       type: object
+      required: [login, password, userRoles]
       properties:
         login:
           type: string
